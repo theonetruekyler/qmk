@@ -32,7 +32,8 @@ enum planck_layers {
 #if 0
   _PLOVER,
 #endif
-  _ADJUST
+  _ADJUST,
+  _HYPER
 };
 
 enum planck_keycodes {
@@ -50,11 +51,16 @@ enum planck_keycodes {
 #endif
   DSK_LFT,
   DSK_RGT,
+  WIN_LFT,
+  WIN_UP,
+  WIN_DN,
+  WIN_RGT,
   PAR_PRN,
   PAR_CBR,
   PAR_BRC,
   DUB_AMP,
-  DUB_PIP
+  DUB_PIP,
+  HYPER
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -67,14 +73,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      | Ctrl | Alt  | GUI  |Lower |Shift |Space |Raise |DskLft| Pg Dn| Pg Up|DskRgt|
+ * | Hyper| Ctrl | Alt  | GUI  |Lower |Space |Space |Raise |DskLft| Pg Dn| Pg Up|DskRgt|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
   {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT},
   {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT },
-  {_______, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_LSFT,  KC_SPC,  RAISE,   DSK_LFT, KC_PGDN, KC_PGUP, DSK_RGT}
+  {HYPER,   KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   DSK_LFT, KC_PGDN, KC_PGUP, DSK_RGT}
 },
 
 #if 0
@@ -123,14 +129,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |   -  |   =  |   [  |   ]  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |      |      |      |      |             |      | Left | Down | Up   | Right|
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = {
   {KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL },
   {_______, _______, _______, _______, _______, _______, _______, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE},
   {_______, _______, _______, _______, _______, _______, _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
 },
 
 /* Raise
@@ -141,14 +147,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |  F11 |  F12 |      |      |      |      |ISO # |ISO / |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |      |      |      |      |             |      | Left | Down | Up   | Right|
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = {
   {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL },
   {_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_BSLS},
   {_______, KC_F11,  KC_F12,  _______, _______, _______, _______, KC_NUHS, KC_NUBS, _______, _______, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
 },
 
 #if 0
@@ -173,20 +179,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
- * |      | Reset|      |      |      |      |      |      |      |      |      |  Del |
+ * |      | Reset|      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|Audoff|      | Left | Down | Up   | Right|      |      |
+ * |      |      |      |Aud on|Audoff|      |      |      |      |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |  []  |      |
+ * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_ADJUST] = {
+  {_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, MU_MOD,  AU_ON,   AU_OFF,  _______, _______, _______, _______, _______, _______, _______},
+  {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
+},
+
+/* HYPER (Custom)
+ * ,-----------------------------------------------------------------------------------.
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_ADJUST] = {
-  {_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL },
-  {_______, _______, MU_MOD,  AU_ON,   AU_OFF,  _______, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______, _______},
-  {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, PAR_BRC, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
+[_HYPER] = {
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, WIN_LFT, WIN_DN,  WIN_UP,  WIN_RGT}
 }
 
 };
@@ -321,6 +345,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
 #endif
+    case HYPER:
+      if (record->event.pressed) {
+        layer_on(_HYPER);
+      }
+      else {
+        layer_off(_HYPER);
+      }
+      return false;
     case DSK_LFT:
       if (record->event.pressed) {
         chord_keys(3, KC_LGUI, KC_LCTL, KC_LEFT);
@@ -329,6 +361,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case DSK_RGT:
       if (record->event.pressed) {
         chord_keys(3, KC_LGUI, KC_LCTL, KC_RIGHT);
+      }
+      return false;
+    case WIN_LFT:
+      if (record->event.pressed) {
+        chord_keys(2, KC_LGUI, KC_LEFT);
+      }
+      return false;
+    case WIN_DN:
+      if (record->event.pressed) {
+        chord_keys(2, KC_LGUI, KC_DOWN);
+      }
+      return false;
+    case WIN_UP:
+      if (record->event.pressed) {
+        chord_keys(2, KC_LGUI, KC_UP);
+      }
+      return false;
+    case WIN_RGT:
+      if (record->event.pressed) {
+        chord_keys(2, KC_LGUI, KC_RIGHT);
       }
       return false;
     case PAR_PRN:
